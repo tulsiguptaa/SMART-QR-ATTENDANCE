@@ -821,17 +821,7 @@ const TeacherDashboard = () => {
                                             </CardBody>
                                         </Card>
 
-                                        {/* Debug Information - Remove this in production */}
-                                        <Card w="full" variant="outline" bg="gray.50">
-                                            <CardBody>
-                                                <Text fontSize="sm" fontWeight="bold" color="gray.700" mb={2}>
-                                                    Debug Info (Available QR Data):
-                                                </Text>
-                                                <Text fontSize="xs" color="gray.600" fontFamily="mono">
-                                                    {JSON.stringify(selectedQR, null, 2)}
-                                                </Text>
-                                            </CardBody>
-                                        </Card>
+                                        
 
                                         <Button
                                             bg="linear-gradient(135deg, #667eea 0%,rgb(118, 75, 162) 100%)"
