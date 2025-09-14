@@ -1,0 +1,30 @@
+{
+    "name": "smart-qr-attendance-app",
+    "version": "1.0.0",
+    "description": "A modern QR code-based attendance management system",
+    "main": "index.js",
+    "scripts": {
+        "start:dev": "concurrently \"npm run backend:dev\" \"npm run frontend:dev\"",
+        "backend:dev": "cd backend && npm run dev",
+        "frontend:dev": "cd frontend && npm run dev",
+        "backend:install": "cd backend && npm install",
+        "frontend:install": "cd frontend && npm install",
+        "install:all": "npm run backend:install && npm run frontend:install",
+        "build": "cd frontend && npm run build",
+        "start": "cd backend && npm start",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "attendance",
+        "qr-code",
+        "education",
+        "nodejs",
+        "react",
+        "mongodb"
+    ],
+    "author": "Your Name",
+    "license": "MIT",
+    "devDependencies": {
+        "concurrently": "^8.2.0"
+    }
+}
