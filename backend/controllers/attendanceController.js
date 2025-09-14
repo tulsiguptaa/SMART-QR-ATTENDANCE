@@ -4,9 +4,7 @@ const User = require('../models/User');
 const { validationResult } = require('express-validator');
 const { validateQRCode } = require('../utils/generateQR');
 
-// @desc    Mark attendance
-// @route   POST /api/attendance/mark
-// @access  Private
+
 const markAttendance = async (req, res) => {
     try {
         const errors = validationResult(req);
@@ -21,7 +19,6 @@ const markAttendance = async (req, res) => {
         const { qrData, location, deviceInfo } = req.body;
         const studentId = req.user._id;
 
-        // Validate QR code
         const qrValidation = validateQRCode(qrData);
         if (!qrValidation.valid) {
             return res.status(400).json({
@@ -32,7 +29,6 @@ const markAttendance = async (req, res) => {
 
         const { sessionId, subject, teacherId } = qrValidation.data;
 
-        // Check if QR code is still active
         const qrCode = await QRCode.findOne({
             sessionId,
             isActive: true,
@@ -46,7 +42,6 @@ const markAttendance = async (req, res) => {
             });
         }
 
-        // Check if student has already marked attendance for this session
         const existingAttendance = await Attendance.findOne({
             student: studentId,
             qrCode: qrData
@@ -59,7 +54,6 @@ const markAttendance = async (req, res) => {
             });
         }
 
-        // Get teacher info
         const teacher = await User.findById(teacherId);
         if (!teacher) {
             return res.status(400).json({
@@ -68,7 +62,6 @@ const markAttendance = async (req, res) => {
             });
         }
 
-        // Create attendance record
         const attendance = await Attendance.create({
             student: studentId,
             studentId: req.user.studentId,
@@ -86,7 +79,6 @@ const markAttendance = async (req, res) => {
             status: 'present'
         });
 
-        // Update QR code attendance count
         qrCode.currentAttendance += 1;
         await qrCode.save();
 
@@ -104,9 +96,6 @@ const markAttendance = async (req, res) => {
     }
 };
 
-// @desc    Get student attendance
-// @route   GET /api/attendance/student
-// @access  Private
 const getStudentAttendance = async (req, res) => {
     try {
         const { page = 1, limit = 10, subject, startDate, endDate } = req.query;
@@ -153,9 +142,6 @@ const getStudentAttendance = async (req, res) => {
     }
 };
 
-// @desc    Get teacher's class attendance
-// @route   GET /api/attendance/teacher
-// @access  Private
 const getTeacherAttendance = async (req, res) => {
     try {
         const { page = 1, limit = 10, subject, date } = req.query;
@@ -202,9 +188,6 @@ const getTeacherAttendance = async (req, res) => {
     }
 };
 
-// @desc    Get attendance statistics
-// @route   GET /api/attendance/stats
-// @access  Private
 const getAttendanceStats = async (req, res) => {
     try {
         const { period = 'month' } = req.query;
@@ -222,7 +205,6 @@ const getAttendanceStats = async (req, res) => {
             groupBy = { subject: '$subject' };
         }
 
-        // Date filtering based on period
         const now = new Date();
         let startDate;
 
@@ -278,9 +260,6 @@ const getAttendanceStats = async (req, res) => {
     }
 };
 
-// @desc    Get recent attendance
-// @route   GET /api/attendance/recent
-// @access  Private
 const getRecentAttendance = async (req, res) => {
     try {
         const { limit = 5 } = req.query;

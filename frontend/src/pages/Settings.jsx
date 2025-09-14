@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Box,
     VStack,
@@ -20,8 +20,10 @@ import {
     Input,
     Textarea,
     Badge,
-    useColorModeValue
+    useColorModeValue,
+    useColorMode
 } from '@chakra-ui/react'
+import { MoonIcon, SunIcon } from '@chakra-ui/icons'
 import {
     Settings as SettingsIcon,
     Bell,
@@ -32,6 +34,7 @@ import {
 } from 'lucide-react'
 
 const Settings = () => {
+    const { colorMode, toggleColorMode, setColorMode } = useColorMode()
     const [settings, setSettings] = useState({
         notifications: {
             email: true,
@@ -45,7 +48,7 @@ const Settings = () => {
             showLastLogin: false
         },
         appearance: {
-            theme: 'light',
+            theme: colorMode,
             language: 'en',
             compactMode: false
         },
@@ -59,25 +62,68 @@ const Settings = () => {
     const toast = useToast()
     const cardBg = useColorModeValue('white', 'gray.800')
 
-    const handleSettingChange = (category, key, value) => {
+    useEffect(() => {
+        const savedSettings = localStorage.getItem('userSettings')
+        if (savedSettings) {
+            const parsedSettings = JSON.parse(savedSettings)
+            setSettings(parsedSettings)
+            if (parsedSettings.appearance?.theme && parsedSettings.appearance.theme !== colorMode) {
+                setColorMode(parsedSettings.appearance.theme)
+            }
+        }
+    }, [colorMode, setColorMode])
+
+    useEffect(() => {
         setSettings(prev => ({
             ...prev,
-            [category]: {
-                ...prev[category],
-                [key]: value
+            appearance: {
+                ...prev.appearance,
+                theme: colorMode
             }
         }))
+    }, [colorMode])
+
+    const handleSettingChange = (category, key, value) => {
+        if (category === 'appearance' && key === 'theme') {
+            setColorMode(value)
+            const updatedSettings = {
+                ...settings,
+                appearance: {
+                    ...settings.appearance,
+                    theme: value
+                }
+            }
+            setSettings(updatedSettings)
+            localStorage.setItem('userSettings', JSON.stringify(updatedSettings))
+            return
+        }
+        
+        const updatedSettings = {
+            ...settings,
+            [category]: {
+                ...settings[category],
+                [key]: value
+            }
+        }
+        setSettings(updatedSettings)
+        localStorage.setItem('userSettings', JSON.stringify(updatedSettings))
     }
 
     const saveSettings = async () => {
         try {
             setLoading(true)
 
-            // Simulate API call
             await new Promise(resolve => setTimeout(resolve, 1000))
 
-            // In a real app, you would save to backend
-            localStorage.setItem('userSettings', JSON.stringify(settings))
+            const currentTheme = localStorage.getItem('chakra-ui-color-mode')
+            const settingsToSave = {
+                ...settings,
+                appearance: {
+                    ...settings.appearance,
+                    theme: currentTheme || settings.appearance.theme
+                }
+            }
+            localStorage.setItem('userSettings', JSON.stringify(settingsToSave))
 
             toast({
                 title: 'Settings Saved!',
@@ -123,6 +169,8 @@ const Settings = () => {
                 loginAlerts: true
             }
         })
+        
+        setColorMode('light')
 
         toast({
             title: 'Settings Reset',
@@ -144,12 +192,10 @@ const Settings = () => {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                // backgroundImage: 'url("https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80")',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 backgroundRepeat: 'no-repeat',
-                // backgroundColor: 'rgb(118, 75, 162)',
-                opacity: 0.5,
+               opacity: 0.5,
                 zIndex: 1
             }}
         >
@@ -337,15 +383,26 @@ const Settings = () => {
                         <VStack spacing={4} align="stretch">
                             <FormControl>
                                 <FormLabel>Theme</FormLabel>
-                                <Select
-                                    value={settings.appearance.theme}
-                                    onChange={(e) => handleSettingChange('appearance', 'theme', e.target.value)}
-                                >
-                                    <option value="light">Light</option>
-                                    <option value="dark">Dark</option>
-                                    <option value="auto">Auto (System)</option>
-                                </Select>
-                                <FormHelperText>Choose your preferred color scheme</FormHelperText>
+                                <HStack spacing={4}>
+                                    <Select
+                                        value={settings.appearance.theme}
+                                        onChange={(e) => handleSettingChange('appearance', 'theme', e.target.value)}
+                                        width="150px"
+                                    >
+                                        <option value="light">Light</option>
+                                        <option value="dark">Dark</option>
+                                    </Select>
+                                    <HStack spacing={2} align="center">
+                                        <SunIcon color={settings.appearance.theme === 'light' ? 'yellow.400' : 'gray.400'} />
+                                        <Switch
+                                            isChecked={settings.appearance.theme === 'dark'}
+                                            onChange={(e) => handleSettingChange('appearance', 'theme', e.target.checked ? 'dark' : 'light')}
+                                            colorScheme="brand"
+                                            size="lg"
+                                        />
+                                        <MoonIcon color={settings.appearance.theme === 'dark' ? 'purple.300' : 'gray.400'} />
+                                    </HStack>
+                                </HStack>
                             </FormControl>
 
                             <FormControl>

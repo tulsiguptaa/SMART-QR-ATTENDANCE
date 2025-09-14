@@ -11,9 +11,6 @@ const {
 
 const router = express.Router();
 
-// @route   POST /api/attendance/mark
-// @desc    Mark attendance
-// @access  Private (Student)
 router.post('/mark', auth, authorize('student'), [
     body('qrData')
         .notEmpty()
@@ -27,9 +24,6 @@ router.post('/mark', auth, authorize('student'), [
         .withMessage('Device info must be an object')
 ], markAttendance);
 
-// @route   GET /api/attendance/student
-// @desc    Get student attendance
-// @access  Private (Student)
 router.get('/student', auth, authorize('student'), [
     query('page')
         .optional()
@@ -54,9 +48,6 @@ router.get('/student', auth, authorize('student'), [
         .withMessage('End date must be a valid date')
 ], getStudentAttendance);
 
-// @route   GET /api/attendance/teacher
-// @desc    Get teacher's class attendance
-// @access  Private (Teacher/Admin)
 router.get('/teacher', auth, authorize('teacher', 'admin'), [
     query('page')
         .optional()
@@ -77,9 +68,6 @@ router.get('/teacher', auth, authorize('teacher', 'admin'), [
         .withMessage('Date must be a valid date')
 ], getTeacherAttendance);
 
-// @route   GET /api/attendance/stats
-// @desc    Get attendance statistics
-// @access  Private
 router.get('/stats', auth, [
     query('period')
         .optional()
@@ -87,9 +75,6 @@ router.get('/stats', auth, [
         .withMessage('Period must be week, month, or year')
 ], getAttendanceStats);
 
-// @route   GET /api/attendance/recent
-// @desc    Get recent attendance
-// @access  Private
 router.get('/recent', auth, [
     query('limit')
         .optional()

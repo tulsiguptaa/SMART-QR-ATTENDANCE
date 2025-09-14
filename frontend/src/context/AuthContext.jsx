@@ -60,7 +60,6 @@ export const AuthProvider = ({ children }) => {
     const [state, dispatch] = useReducer(authReducer, initialState)
     const navigate = useNavigate()
 
-    // Set up axios interceptor for token
     useEffect(() => {
         if (state.token) {
             api.defaults.headers.common['Authorization'] = `Bearer ${state.token}`
@@ -69,7 +68,6 @@ export const AuthProvider = ({ children }) => {
         }
     }, [state.token])
 
-    // Check if user is logged in on app start
     useEffect(() => {
         const checkAuth = async () => {
             if (state.token) {
@@ -105,7 +103,6 @@ export const AuthProvider = ({ children }) => {
 
             toast.success('Login successful!')
 
-            // Redirect based on role
             if (user.role === 'admin') {
                 navigate('/admin')
             } else if (user.role === 'teacher') {
@@ -134,7 +131,6 @@ export const AuthProvider = ({ children }) => {
 
             toast.success('Registration successful!')
 
-            // Redirect based on role
             if (user.role === 'admin') {
                 navigate('/admin')
             } else if (user.role === 'teacher') {

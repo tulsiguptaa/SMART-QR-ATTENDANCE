@@ -82,7 +82,6 @@ const QRScanner = () => {
             setLoading(true)
             setError(null)
 
-            // Get user's current location
             const position = await getCurrentPosition()
 
             const attendanceData = {
@@ -174,10 +173,8 @@ const QRScanner = () => {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                // backgroundImage: 'url("https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80")',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
-                // backgroundColor: 'rgb(118, 75, 162)',
                 backgroundRepeat: 'no-repeat',
                 opacity: 0.5,
                 zIndex: 1

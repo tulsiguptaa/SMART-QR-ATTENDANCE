@@ -87,8 +87,6 @@ const AdminDashboard = () => {
     const fetchDashboardData = async () => {
         try {
             setLoading(true)
-            // Note: These endpoints would need to be implemented in the backend
-            // For now, we'll use mock data
             const mockUsers = [
                 {
                     _id: '1',
@@ -136,11 +134,6 @@ const AdminDashboard = () => {
     const createUser = async (data) => {
         try {
             setUserLoading(true)
-
-            // This would call the actual API endpoint
-            // const response = await api.post('/admin/users', data)
-
-            // Mock response
             const newUser = {
                 _id: Date.now().toString(),
                 ...data,
@@ -177,8 +170,6 @@ const AdminDashboard = () => {
 
     const toggleUserStatus = async (userId) => {
         try {
-            // This would call the actual API endpoint
-            // await api.put(`/admin/users/${userId}/toggle-status`)
 
             setUsers(prev => prev.map(user =>
                 user._id === userId
@@ -232,10 +223,9 @@ const AdminDashboard = () => {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                // backgroundImage: 'url("https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80")',
-                backgroundSize: 'cover',
+               backgroundSize: 'cover',
                 backgroundPosition: 'center',
-                // backgroundColor: 'rgb(118, 75, 162)',
+              
                 backgroundRepeat: 'no-repeat',
                 opacity: 0.1,
                 zIndex: 1

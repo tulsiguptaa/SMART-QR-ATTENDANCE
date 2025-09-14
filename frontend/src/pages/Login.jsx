@@ -221,45 +221,7 @@ const Login = () => {
                         </CardBody>
                     </Card>
 
-                    {/* Demo Accounts */}
-                    {/* <Card w="full" bg={cardBg} shadow="sm">
-                        <CardBody p={6}>
-                            <VStack spacing={4}>
-                                <Text fontSize="sm" color="gray.600" textAlign="center">
-                                    Demo Accounts
-                                </Text>
-                                <VStack spacing={2} w="full">
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        w="full"
-                                        onClick={() => login('admin@demo.com', 'password123')}
-                                        isLoading={loading}
-                                    >
-                                        Admin Demo
-                                    </Button>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        w="full"
-                                        onClick={() => login('teacher@demo.com', 'password123')}
-                                        isLoading={loading}
-                                    >
-                                        Teacher Demo
-                                    </Button>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        w="full"
-                                        onClick={() => login('student@demo.com', 'password123')}
-                                        isLoading={loading}
-                                    >
-                                        Student Demo
-                                    </Button>
-                                </VStack>
-                            </VStack>
-                        </CardBody>
-                    </Card> */}
+                   
                 </VStack>
             </Container>
         </Box>

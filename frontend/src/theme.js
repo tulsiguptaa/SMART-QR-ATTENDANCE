@@ -1,6 +1,10 @@
 import { extendTheme } from '@chakra-ui/react'
 
 const theme = extendTheme({
+    config: {
+        initialColorMode: 'light',
+        useSystemColorMode: true,
+    },
     colors: {
         brand: {
             50: '#e6f3ff',
@@ -32,12 +36,12 @@ const theme = extendTheme({
         body: 'Inter, system-ui, sans-serif',
     },
     styles: {
-        global: {
+        global: (props) => ({
             body: {
-                bg: 'gray.50',
-                color: 'gray.800',
+                bg: props.colorMode === 'dark' ? 'gray.900' : 'gray.50',
+                color: props.colorMode === 'dark' ? 'white' : 'gray.800',
             },
-        },
+        }),
     },
     components: {
         Button: {
@@ -55,15 +59,15 @@ const theme = extendTheme({
             },
         },
         Card: {
-            baseStyle: {
+            baseStyle: (props) => ({
                 container: {
-                    bg: 'white',
+                    bg: props.colorMode === 'dark' ? 'gray.800' : 'white',
                     borderRadius: 'xl',
                     boxShadow: 'sm',
                     border: '1px solid',
-                    borderColor: 'gray.200',
+                    borderColor: props.colorMode === 'dark' ? 'gray.700' : 'gray.200',
                 },
-            },
+            }),
         },
     },
 })

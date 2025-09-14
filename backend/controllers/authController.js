@@ -8,9 +8,6 @@ const generateToken = (id) => {
     });
 };
 
-// @desc    Register user
-// @route   POST /api/auth/register
-// @access  Public
 const register = async (req, res) => {
     try {
         const errors = validationResult(req);
@@ -24,7 +21,6 @@ const register = async (req, res) => {
 
         const { name, email, password, role, department, year, phone } = req.body;
 
-        // Check if user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({
@@ -33,7 +29,6 @@ const register = async (req, res) => {
             });
         }
 
-        // Create user
         const user = await User.create({
             name,
             email,
@@ -71,9 +66,6 @@ const register = async (req, res) => {
     }
 };
 
-// @desc    Login user
-// @route   POST /api/auth/login
-// @access  Public
 const login = async (req, res) => {
     try {
         const errors = validationResult(req);
@@ -87,7 +79,6 @@ const login = async (req, res) => {
 
         const { email, password } = req.body;
 
-        // Check if user exists
         const user = await User.findOne({ email }).select('+password');
         if (!user) {
             return res.status(401).json({
@@ -96,7 +87,6 @@ const login = async (req, res) => {
             });
         }
 
-        // Check if user is active
         if (!user.isActive) {
             return res.status(401).json({
                 success: false,
@@ -104,7 +94,6 @@ const login = async (req, res) => {
             });
         }
 
-        // Check password
         const isMatch = await user.comparePassword(password);
         if (!isMatch) {
             return res.status(401).json({
@@ -113,7 +102,6 @@ const login = async (req, res) => {
             });
         }
 
-        // Update last login
         user.lastLogin = new Date();
         await user.save();
 
@@ -145,9 +133,6 @@ const login = async (req, res) => {
     }
 };
 
-// @desc    Get current user
-// @route   GET /api/auth/me
-// @access  Private
 const getMe = async (req, res) => {
     try {
         res.json({
@@ -165,9 +150,6 @@ const getMe = async (req, res) => {
     }
 };
 
-// @desc    Update user profile
-// @route   PUT /api/auth/profile
-// @access  Private
 const updateProfile = async (req, res) => {
     try {
         const { name, department, year, phone } = req.body;
@@ -193,9 +175,6 @@ const updateProfile = async (req, res) => {
     }
 };
 
-// @desc    Change password
-// @route   PUT /api/auth/change-password
-// @access  Private
 const changePassword = async (req, res) => {
     try {
         const { currentPassword, newPassword } = req.body;
@@ -209,7 +188,6 @@ const changePassword = async (req, res) => {
             });
         }
 
-        // Check current password
         const isMatch = await user.comparePassword(currentPassword);
         if (!isMatch) {
             return res.status(400).json({
@@ -218,7 +196,6 @@ const changePassword = async (req, res) => {
             });
         }
 
-        // Update password
         user.password = newPassword;
         await user.save();
 

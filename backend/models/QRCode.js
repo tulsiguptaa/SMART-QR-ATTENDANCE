@@ -53,7 +53,6 @@ const qrCodeSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// Index for better query performance
 qrCodeSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 qrCodeSchema.index({ teacher: 1, isActive: 1 });
 qrCodeSchema.index({ qrData: 1 });

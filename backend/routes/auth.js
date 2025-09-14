@@ -11,9 +11,6 @@ const {
 
 const router = express.Router();
 
-// @route   POST /api/auth/register
-// @desc    Register user
-// @access  Public
 router.post('/register', [
     body('name')
         .trim()
@@ -32,9 +29,6 @@ router.post('/register', [
         .withMessage('Role must be student, teacher, or admin')
 ], register);
 
-// @route   POST /api/auth/login
-// @desc    Login user
-// @access  Public
 router.post('/login', [
     body('email')
         .isEmail()
@@ -45,14 +39,8 @@ router.post('/login', [
         .withMessage('Password is required')
 ], login);
 
-// @route   GET /api/auth/me
-// @desc    Get current user
-// @access  Private
 router.get('/me', auth, getMe);
 
-// @route   PUT /api/auth/profile
-// @desc    Update user profile
-// @access  Private
 router.put('/profile', auth, [
     body('name')
         .optional()
@@ -76,9 +64,6 @@ router.put('/profile', auth, [
         .withMessage('Phone number must be between 10 and 15 characters')
 ], updateProfile);
 
-// @route   PUT /api/auth/change-password
-// @desc    Change user password
-// @access  Private
 router.put('/change-password', auth, [
     body('currentPassword')
         .notEmpty()

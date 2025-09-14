@@ -22,9 +22,11 @@ import {
     useBreakpointValue,
     VStack,
     HStack,
-    Divider
+    Divider,
+    useColorMode,
+    useColorModeValue
 } from '@chakra-ui/react'
-import { HamburgerIcon, ChevronDownIcon } from '@chakra-ui/icons'
+import { HamburgerIcon, ChevronDownIcon, MoonIcon, SunIcon } from '@chakra-ui/icons'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
@@ -45,6 +47,10 @@ const Layout = ({ children }) => {
     const location = useLocation()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const isMobile = useBreakpointValue({ base: true, md: false })
+    const { colorMode, toggleColorMode } = useColorMode()
+    const headerBg = useColorModeValue('rgba(247, 247, 247, 0.83)', 'rgba(26, 32, 44, 0.83)')
+    const sidebarBg = useColorModeValue('rgba(255, 255, 255, 0.95)', 'rgba(26, 32, 44, 0.95)')
+    const menuBg = useColorModeValue('rgba(255, 255, 255, 0.95)', 'rgba(26, 32, 44, 0.95)')
 
     const menuItems = [
         { name: 'Dashboard', icon: Home, path: '/dashboard', roles: ['student'] },
@@ -137,7 +143,7 @@ const Layout = ({ children }) => {
         >
             {/* Header */}
             <Box
-                bg="rgba(247, 247, 247, 0.83)"
+                bg={headerBg}
                 shadow="0 25px 50px -12px rgba(0, 0, 0, 0.25)"
                 borderBottom="1px"
                 borderColor="rgba(255, 255, 255, 0.2)"
@@ -166,6 +172,8 @@ const Layout = ({ children }) => {
                         </Box>
                     </HStack>
 
+                    <Box />
+
                     <Menu>
                         <MenuButton
                             as={Button}
@@ -191,7 +199,7 @@ const Layout = ({ children }) => {
                         </MenuButton>
                         <MenuList
                             zIndex={9999}
-                            bg="rgba(255, 255, 255, 0.95)"
+                            bg={menuBg}
                             backdropFilter="blur(20px)"
                             border="1px solid rgba(255, 255, 255, 0.2)"
                             shadow="0 25px 50px -12px rgba(0, 0, 0, 0.25)"
@@ -233,7 +241,7 @@ const Layout = ({ children }) => {
                 {!isMobile && (
                     <Box
                         w="250px"
-                        bg="rgba(255, 255, 255, 0.95)"
+                        bg={sidebarBg}
                         minH="calc(100vh - 73px)"
                         borderRight="1px"
                         borderColor="rgba(255, 255, 255, 0.2)"
@@ -247,7 +255,7 @@ const Layout = ({ children }) => {
                 {/* Mobile Drawer */}
                 <Drawer isOpen={isOpen} onClose={onClose} placement="left">
                     <DrawerOverlay bg="rgba(0, 0, 0, 0.3)" backdropFilter="blur(10px)" />
-                    <DrawerContent bg="rgba(255, 255, 255, 0.95)" backdropFilter="blur(20px)">
+                    <DrawerContent bg={sidebarBg} backdropFilter="blur(20px)">
                         <DrawerCloseButton />
                         <DrawerHeader bg="linear-gradient(135deg, #667eea 0%,rgb(118, 75, 162) 100%)" color="white">
                             <Text fontSize="lg" fontWeight="bold">Menu</Text>

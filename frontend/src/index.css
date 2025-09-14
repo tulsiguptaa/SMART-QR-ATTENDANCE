@@ -18,7 +18,6 @@ body {
     min-height: 100vh;
 }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar {
     width: 6px;
 }
@@ -36,7 +35,6 @@ body {
     background: #a8a8a8;
 }
 
-/* Loading animation */
 @keyframes spin {
     0% {
         transform: rotate(0deg);

@@ -10,9 +10,6 @@ const {
 
 const router = express.Router();
 
-// @route   POST /api/qr/generate
-// @desc    Generate QR code for attendance
-// @access  Private (Teacher/Admin only)
 router.post('/generate', auth, authorize('teacher', 'admin'), [
     body('subject')
         .trim()
@@ -29,19 +26,10 @@ router.post('/generate', auth, authorize('teacher', 'admin'), [
         .withMessage('Max attendance must be between 1 and 1000')
 ], generateQR);
 
-// @route   GET /api/qr/active
-// @desc    Get active QR codes for teacher
-// @access  Private (Teacher/Admin only)
 router.get('/active', auth, authorize('teacher', 'admin'), getActiveQRCodes);
 
-// @route   PUT /api/qr/:id/deactivate
-// @desc    Deactivate QR code
-// @access  Private (Teacher/Admin only)
 router.put('/:id/deactivate', auth, authorize('teacher', 'admin'), deactivateQR);
 
-// @route   GET /api/qr/stats
-// @desc    Get QR code statistics
-// @access  Private (Teacher/Admin only)
 router.get('/stats', auth, authorize('teacher', 'admin'), [
     query('period')
         .optional()

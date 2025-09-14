@@ -2,9 +2,6 @@ const QRCode = require('../models/QRCode');
 const { generateQRCode, generateSessionId } = require('../utils/generateQR');
 const { validationResult } = require('express-validator');
 
-// @desc    Generate QR code for attendance
-// @route   POST /api/qr/generate
-// @access  Private (Teacher/Admin only)
 const generateQR = async (req, res) => {
     try {
         const errors = validationResult(req);
@@ -19,10 +16,8 @@ const generateQR = async (req, res) => {
         const { subject, location, maxAttendance = 100 } = req.body;
         const teacherId = req.user._id;
 
-        // Generate session ID
         const sessionId = generateSessionId();
 
-        // Generate QR code data
         const qrData = {
             sessionId,
             subject,
@@ -35,7 +30,6 @@ const generateQR = async (req, res) => {
 
         const { qrCodeDataURL } = await generateQRCode(qrData);
 
-        // Save QR code to database
         const qrCode = await QRCode.create({
             teacher: teacherId,
             subject,
@@ -71,9 +65,6 @@ const generateQR = async (req, res) => {
     }
 };
 
-// @desc    Get active QR codes for teacher
-// @route   GET /api/qr/active
-// @access  Private (Teacher/Admin only)
 const getActiveQRCodes = async (req, res) => {
     try {
         const teacherId = req.user._id;
@@ -96,10 +87,6 @@ const getActiveQRCodes = async (req, res) => {
         });
     }
 };
-
-// @desc    Deactivate QR code
-// @route   PUT /api/qr/:id/deactivate
-// @access  Private (Teacher/Admin only)
 const deactivateQR = async (req, res) => {
     try {
         const { id } = req.params;
@@ -132,15 +119,11 @@ const deactivateQR = async (req, res) => {
     }
 };
 
-// @desc    Get QR code statistics
-// @route   GET /api/qr/stats
-// @access  Private (Teacher/Admin only)
 const getQRStats = async (req, res) => {
     try {
         const teacherId = req.user._id;
         const { period = 'month' } = req.query;
 
-        // Date filtering based on period
         const now = new Date();
         let startDate;
 

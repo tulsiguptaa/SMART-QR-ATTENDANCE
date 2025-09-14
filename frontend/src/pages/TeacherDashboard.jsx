@@ -111,7 +111,6 @@ const TeacherDashboard = () => {
         try {
             setQrLoading(true)
 
-            // Get current location
             const position = await getCurrentPosition()
 
             const qrData = {
@@ -206,14 +205,12 @@ const TeacherDashboard = () => {
     }
 
     const generateQRCodeCanvas = (qrData) => {
-        // Create a more realistic QR code pattern
         const canvas = document.createElement('canvas')
         const ctx = canvas.getContext('2d')
         const size = 200
         canvas.width = size
         canvas.height = size
 
-        // Create QR code data string
         const qrText = JSON.stringify({
             id: qrData._id,
             subject: qrData.subject,
@@ -221,38 +218,30 @@ const TeacherDashboard = () => {
             timestamp: new Date().toISOString()
         })
 
-        // Generate a more complex hash
         const hash = qrText.split('').reduce((a, b) => {
             a = ((a << 5) - a) + b.charCodeAt(0)
             return a & a
         }, 0)
 
-        // Set background
         ctx.fillStyle = '#ffffff'
         ctx.fillRect(0, 0, size, size)
 
-        // Set foreground color
         ctx.fillStyle = '#000000'
 
-        // Create QR-like pattern with proper structure
         const moduleSize = 4
         const modules = Math.floor(size / moduleSize)
 
-        // Helper function to check if position should be filled
         const shouldFill = (i, j) => {
-            // Corner finder patterns (7x7 squares)
             if ((i < 7 && j < 7) ||
                 (i < 7 && j >= modules - 7) ||
                 (i >= modules - 7 && j < 7)) {
                 return true
             }
 
-            // Timing patterns
             if (i === 6 || j === 6) {
                 return (i + j) % 2 === 0
             }
 
-            // Data area - create a more realistic pattern
             if (i >= 9 && j >= 9 && i < modules - 9 && j < modules - 9) {
                 const dataSeed = (i * modules + j + hash) % 1000
                 return dataSeed % 2 === 0
@@ -261,7 +250,6 @@ const TeacherDashboard = () => {
             return false
         }
 
-        // Draw the QR pattern
         for (let i = 0; i < modules; i++) {
             for (let j = 0; j < modules; j++) {
                 if (shouldFill(i, j)) {

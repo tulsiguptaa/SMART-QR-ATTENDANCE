@@ -41,7 +41,6 @@ const validateQRCode = (qrData) => {
         const qrTime = parsed.timestamp;
         const timeDiff = now - qrTime;
 
-        // QR code is valid for 15 minutes
         if (timeDiff > 15 * 60 * 1000) {
             return { valid: false, message: 'QR code has expired' };
         }

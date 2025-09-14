@@ -5,25 +5,21 @@ const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const errorHandler = require('./middleware/errorHandler');
 
-// Load environment variables
 dotenv.config();
 
-// Connect to database
 connectDB();
 
 const app = express();
 
-// Rate limiting
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // limit each IP to 100 requests per windowMs
+    windowMs: 15 * 60 * 1000, 
+    max: 100,
     message: {
         success: false,
         message: 'Too many requests from this IP, please try again later.'
     }
 });
 
-// Middleware
 app.use(limiter);
 app.use(cors({
     origin: process.env.FRONTEND_URL || 'http://localhost:3000',
@@ -32,7 +28,6 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Health check endpoint
 app.get('/health', (req, res) => {
     res.json({
         success: true,
@@ -41,15 +36,12 @@ app.get('/health', (req, res) => {
     });
 });
 
-// Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/attendance', require('./routes/attendance'));
 app.use('/api/qr', require('./routes/qr'));
 
-// Error handling middleware
 app.use(errorHandler);
 
-// 404 handler
 app.use('*', (req, res) => {
     res.status(404).json({
         success: false,

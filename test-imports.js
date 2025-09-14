@@ -1,4 +1,3 @@
-// Test script to check for import issues
 const fs = require('fs');
 const path = require('path');
 
@@ -10,7 +9,6 @@ function checkFile(filePath) {
 
     lines.forEach((line, index) => {
         if (line.includes('from \'lucide-react\'')) {
-            // Check for problematic icon names
             const iconMatch = line.match(/\{([^}]+)\}/);
             if (iconMatch) {
                 const icons = iconMatch[1].split(',').map(icon => icon.trim());

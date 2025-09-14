@@ -112,7 +112,7 @@ const Attendance = () => {
     }
 
     const exportAttendance = () => {
-        // This would implement CSV export functionality
+        
         toast({
             title: 'Export Feature',
             description: 'CSV export functionality coming soon',
@@ -166,7 +166,6 @@ const Attendance = () => {
                 bottom: 0,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
-                // backgroundColor: 'rgb(118, 75, 162)',
                 backgroundRepeat: 'no-repeat',
                 opacity: 0.5,
                 zIndex: 1
