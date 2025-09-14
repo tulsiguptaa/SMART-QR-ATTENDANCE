@@ -37,15 +37,24 @@ import {
     Scan
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
+import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
 import { format } from 'date-fns'
 
 const Dashboard = () => {
     const { user } = useAuth()
+    const navigate = useNavigate()
     const [stats, setStats] = useState(null)
     const [recentAttendance, setRecentAttendance] = useState([])
     const [loading, setLoading] = useState(true)
     const cardBg = useColorModeValue('white', 'gray.800')
+
+    // Debug logging
+    console.log('Dashboard component rendered')
+    console.log('User:', user)
+    console.log('Loading:', loading)
+    console.log('Stats:', stats)
+    console.log('Recent Attendance:', recentAttendance)
 
     useEffect(() => {
         fetchDashboardData()
@@ -59,19 +68,40 @@ const Dashboard = () => {
                 api.get('/attendance/recent?limit=5')
             ])
 
-            setStats(statsResponse.data.data.stats)
-            setRecentAttendance(recentResponse.data.data.attendances)
+            setStats(statsResponse.data.data?.stats || [])
+            setRecentAttendance(recentResponse.data.data?.attendances || [])
         } catch (error) {
             console.error('Error fetching dashboard data:', error)
+            // Set default values to prevent blank page
+            setStats([])
+            setRecentAttendance([])
         } finally {
             setLoading(false)
         }
     }
 
+    // Show loading spinner while data is being fetched
     if (loading) {
         return (
             <Center minH="400px">
-                <Spinner size="xl" color="brand.500" />
+                <VStack spacing={4}>
+                    <Spinner size="xl" color="brand.500" />
+                    <Text color="gray.600">Loading dashboard...</Text>
+                </VStack>
+            </Center>
+        )
+    }
+
+    // Show error state if user is not available
+    if (!user) {
+        return (
+            <Center minH="400px">
+                <VStack spacing={4}>
+                    <Text color="red.500" fontSize="lg">Error: User not found</Text>
+                    <Button onClick={() => navigate('/')} colorScheme="brand">
+                        Go to Login
+                    </Button>
+                </VStack>
             </Center>
         )
     }
@@ -98,17 +128,6 @@ const Dashboard = () => {
             default: return <Clock size={16} />
         }
     }
-
-
-
-
-
-    const navigate = useNavigate();
-
-
-
-
-    
 
     return (
         <Box
@@ -146,7 +165,7 @@ const Dashboard = () => {
                                 bg="linear-gradient(135deg, #667eea 0%,rgb(118, 75, 162) 100%)"
                                 color="white"
                                 size="lg"
-                                onClick={() => window.location.href = '/scan'}
+                                onClick={() => navigate('/scan')}
                                 _hover={{
                                     bg: "linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%)",
                                     transform: "translateY(-2px)",
@@ -288,7 +307,7 @@ const Dashboard = () => {
                                 bg="linear-gradient(135deg, #667eea 0%,rgb(118, 75, 162) 100%)"
                                 color="white"
                                 size="sm"
-                                onClick={() => window.location.href = '/attendance'}
+                                onClick={() => navigate('/attendance')}
                                 _hover={{
                                     bg: "linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%)",
                                     transform: "translateY(-2px)",
@@ -347,7 +366,7 @@ const Dashboard = () => {
                                         leftIcon={<Scan size={20} />}
                                         bg="linear-gradient(135deg, #667eea 0%,rgb(118, 75, 162) 100%)"
                                         color="white"
-                                        onClick={() => window.location.href = '/scan'}
+                                        onClick={() => navigate('/scan')}
                                         _hover={{
                                             bg: "linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%)",
                                             transform: "translateY(-2px)",
