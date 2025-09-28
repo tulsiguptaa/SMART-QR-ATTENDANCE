@@ -120,6 +120,9 @@ export const AuthProvider = ({ children }) => {
     const register = async (userData) => {
         dispatch({ type: 'LOGIN_START' })
         try {
+            console.log('Attempting registration with data:', userData)
+            console.log('API Base URL:', api.defaults.baseURL)
+            
             const response = await api.post('/auth/register', userData)
             const { user, token } = response.data.data
 
@@ -139,7 +142,8 @@ export const AuthProvider = ({ children }) => {
                 navigate('/dashboard')
             }
         } catch (error) {
-            const message = error.response?.data?.message || 'Registration failed'
+            console.error('Registration error:', error)
+            const message = error.response?.data?.message || error.message || 'Registration failed'
             dispatch({ type: 'LOGIN_FAILURE', payload: message })
             toast.error(message)
         }
